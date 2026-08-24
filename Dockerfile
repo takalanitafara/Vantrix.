@@ -9,10 +9,6 @@ COPY . .
 
 ENV PORT=8000
 
-CMD ["uvicorn", "server:app", "--host", "0.0.0.0", "--port", "8000", "--app-dir", "/app"]
-
-
-
-
+CMD ["python", "-m", "uvicorn", "server:app", "--host", "0.0.0.0", "--port", "8000"]
 
 
