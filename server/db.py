@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS users (
     password_hash TEXT NOT NULL,
     display_name  TEXT NOT NULL,
     role          TEXT NOT NULL DEFAULT 'user', -- user | developer | admin
+    pw_epoch      INTEGER NOT NULL DEFAULT 1,   -- bumped on password change/reset -> invalidates old sessions
     created_at    TEXT DEFAULT (datetime('now'))
 );
 
@@ -91,6 +92,18 @@ CREATE TABLE IF NOT EXISTS user_subscriptions (
     status     TEXT DEFAULT 'active', -- active | pending | cancelled
     created_at TEXT DEFAULT (datetime('now'))
 );
+
+-- Single-use password-reset tokens for owner/admin accounts.
+-- Only the SHA-256 hash is stored; the raw token exists solely in the
+-- one-time operator delivery (server console / CLI), never in web responses.
+CREATE TABLE IF NOT EXISTS password_reset_tokens (
+    id         INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id    INTEGER NOT NULL REFERENCES users(id),
+    token_hash TEXT UNIQUE NOT NULL,
+    expires_at TEXT NOT NULL,
+    used_at    TEXT, -- NULL until consumed
+    created_at TEXT DEFAULT (datetime('now'))
+);
 """
 
 # Sample marketplace listings so a fresh deployment is browsable. No payment
@@ -140,10 +153,21 @@ def init_db() -> None:
     conn = connect()
     try:
         conn.executescript(SCHEMA)
+        _migrate(conn)
         _seed(conn)
         conn.commit()
     finally:
         conn.close()
+
+
+def _migrate(conn: sqlite3.Connection) -> None:
+    """In-place upgrades for databases created by earlier releases
+    (keeps Docker Compose volumes upgradeable without rebuild-from-scratch)."""
+    cols = [r["name"] for r in conn.execute("PRAGMA table_info(users)")]
+    if "pw_epoch" not in cols:
+        conn.execute(
+            "ALTER TABLE users ADD COLUMN pw_epoch INTEGER NOT NULL DEFAULT 1"
+        )
 
 
 def _seed(conn: sqlite3.Connection) -> None:

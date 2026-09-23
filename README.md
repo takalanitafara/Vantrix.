@@ -50,6 +50,17 @@ python -m server.cli create-user you@example.com 'strong-password' --admin
 python -m server.cli promote you@example.com
 ```
 
+## Password recovery (owner/admin only)
+
+QuantVenue sends no email. Reset links are single-use, expire in 30 minutes,
+are stored hashed, and are delivered only through **operator channels** — never
+in web responses. Passwords themselves are never displayed, logged, or returned.
+
+- Web flow: `/signin` → **Forgot password?** → request a link → read it from the
+  server console (`docker compose logs quantvenue`) → `/reset-password?token=…`
+- CLI flow: `python -m server.cli reset-token you@example.com`
+- Signed-in change: `/account` → *Change password* (other sessions are signed out)
+
 ## Environment variables
 
 | Variable | Default | Meaning |
@@ -68,8 +79,9 @@ for `QUANTVENUE_PRIVATE_MODE` — including unset or garbage — means **private
 
 - **Marketplace:** listings, search/browse, categories, featured — `GET /api/bots`,
   `GET /api/bots/{slug}`, `/`, `/bot/{slug}`
-- **Accounts:** signup/signin/sessions, profile & password management — `/signin`,
-  `/signup`, `/account`
+- **Accounts:** signup/signin/sessions, profile & password management, secure
+  owner/admin password reset — `/signin`, `/signup`, `/forgot-password`,
+  `/reset-password`, `/account`
 - **Payments (plumbing):** `GET /api/checkout/{slug}` redirects to the listing's
   stored Stripe payment link (409 when none is stored);
   `POST /api/checkout/confirm/{ref}` + `/checkout/confirm/{ref}` confirm plumbing

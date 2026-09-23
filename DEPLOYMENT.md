@@ -29,9 +29,28 @@ curl -s https://your-host/health   # {"ok": true, ...}
 Bootstrap the owner account (either way):
 
 ```bash
-docker compose exec quantvenue python -m server.cli create-user you@example.com 'strong-password' --admin
+docker compose exec quantvenue python -m server.cli create-user you@example.com --admin
+# password is prompted with hidden input (omit the argument; it is never echoed or logged)
 # or visit /signup with an email listed in QUANTVENUE_ADMIN_EMAILS
 ```
+
+### Password recovery (owner/admin)
+
+If the owner is locked out, issue a single-use reset link (30-minute expiry,
+stored hashed; the password itself is never displayed or logged):
+
+```bash
+# option A: CLI prints the link directly
+docker compose exec quantvenue python -m server.cli reset-token you@example.com
+
+# option B: request it from /forgot-password on the site, then read the
+# operator console delivery:
+docker compose logs quantvenue | grep reset-password
+```
+
+Then open `/reset-password?token=…`, choose a new password, and sign in.
+Changing the password from `/account` (or via reset) signs out every other
+session and cancels any outstanding reset links.
 
 Confirm the gate: signed out, `/` and `/api/bots` must return 401; `/health`
 must return 200.

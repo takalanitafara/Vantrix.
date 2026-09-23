@@ -23,6 +23,7 @@ from .util import render_error
 # Paths reachable without any session while private (no marketplace data).
 _OPEN_PATHS = {
     "/health", "/signin", "/signout", "/signup",
+    "/forgot-password", "/reset-password",
     "/robots.txt", "/favicon.ico", "/favicon.svg",
 }
 

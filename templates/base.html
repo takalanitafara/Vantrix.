@@ -45,7 +45,8 @@
     'subscribed': 'You are subscribed.',
     'paid_plan_pending_payments': 'Paid plan recorded as pending — billing activates when real payments go live (owner-deferred).',
     'profile_updated': 'Profile updated.',
-    'password_changed': 'Password changed.',
+    'password_changed': 'Password changed. Other sessions have been signed out.',
+    'password_reset': 'Password updated. Please sign in with your new password.',
   } %}
   {% set n = request.query_params.get('notice') %}
   {% if n and notices.get(n) %}<div class="notice">{{ notices[n] }}</div>{% endif %}

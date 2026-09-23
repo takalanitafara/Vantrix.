@@ -7,11 +7,12 @@
   <p class="notice">This deployment is <strong>private</strong>. Only the owner/admin
   account can sign in; public signups are disabled.</p>
   {% endif %}
-  <form method="post" action="/signin">
-    <label>Email <input type="email" name="email" required autofocus></label>
-    <label>Password <input type="password" name="password" required></label>
-    <button class="btn primary wide" type="submit">Sign in</button>
-  </form>
-  {% if not private_mode %}<p class="muted">No account? <a href="/signup">Sign up</a></p>{% endif %}
+    <form method="post" action="/signin">
+      <label>Email <input type="email" name="email" required autofocus></label>
+      <label>Password <input type="password" name="password" required></label>
+      <button class="btn primary wide" type="submit">Sign in</button>
+    </form>
+    <p class="muted"><a href="/forgot-password">Forgot password?</a></p>
+    {% if not private_mode %}<p class="muted">No account? <a href="/signup">Sign up</a></p>{% endif %}
 </div>
 {% endblock %}

@@ -83,6 +83,8 @@ def app_env(tmp_path, monkeypatch):
     monkeypatch.setenv("QUANTVENUE_PRIVATE_MODE", "true")
     monkeypatch.setenv("QUANTVENUE_ADMIN_EMAILS", OWNER_EMAIL)
     monkeypatch.setenv("QUANTVENUE_SECRET_KEY", "test-secret")
+    from server import auth as auth_mod
+    auth_mod._RESET_ATTEMPTS.clear()  # rate-limiter state is per-process
 
 
 @pytest.fixture()
