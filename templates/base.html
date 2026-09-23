@@ -4,6 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{% block title %}Marketplace{% endblock %} · {{ brand }}</title>
+<meta name="description" content="QuantVenue — professional trading-bot marketplace. Independent bots, professionally listed. Platform layer only.">
+<meta property="og:title" content="QuantVenue — Trading-bot marketplace">
+<meta property="og:description" content="Independent trading bots, professionally listed. Not a trading engine.">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
@@ -11,6 +15,7 @@
   <div class="container nav-inner">
     <a class="logo" href="/">Quant<span>Venue</span></a>
     {% if private_mode %}<span class="pill private">PRIVATE</span>{% endif %}
+    <button class="navtoggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
     <div class="navlinks">
       <a href="/">Marketplace</a>
       <a href="/developers">Developers</a>
@@ -39,6 +44,8 @@
     'listing_delisted': 'Listing delisted.',
     'subscribed': 'You are subscribed.',
     'paid_plan_pending_payments': 'Paid plan recorded as pending — billing activates when real payments go live (owner-deferred).',
+    'profile_updated': 'Profile updated.',
+    'password_changed': 'Password changed.',
   } %}
   {% set n = request.query_params.get('notice') %}
   {% if n and notices.get(n) %}<div class="notice">{{ notices[n] }}</div>{% endif %}
@@ -51,5 +58,6 @@
     <span>Private production · no real payments processed</span>
   </div>
 </footer>
+<script src="/static/app.js"></script>
 </body>
 </html>

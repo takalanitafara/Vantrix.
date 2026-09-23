@@ -40,6 +40,14 @@ def test_bot_page_renders(public_client):
     r = public_client.get("/bot/quantora")
     assert r.status_code == 200
     assert "Quantora" in r.text
+    # buy-gated: signed-out visitors get a sign-in prompt, not Buy now
+    assert "Sign in to buy" in r.text
+    assert "Buy now" not in r.text
+
+
+def test_bot_page_buy_now_for_signed_in(owner_client):
+    r = owner_client.get("/bot/quantora")
+    assert r.status_code == 200
     assert "Buy now" in r.text
 
 

@@ -4,6 +4,15 @@
 <h1>Developer studio</h1>
 <p class="muted">{{ dev.display_name }} · <a href="/developers/{{ dev.slug }}">view public page</a></p>
 
+<h2 class="section-title">Developer profile</h2>
+<form class="stacked narrow" method="post" action="/dev/profile">
+  <label>Display name
+    <input type="text" name="display_name" value="{{ dev.display_name }}" required>
+  </label>
+  <label>Bio <textarea name="bio" rows="3">{{ dev.bio }}</textarea></label>
+  <button class="btn" type="submit">Save profile</button>
+</form>
+
 <h2 class="section-title">Your listings</h2>
 {% if bots %}
 <table>
@@ -22,7 +31,8 @@
           <button class="linklike" type="submit">Publish</button>
         </form>
         {% else %}
-        <form method="post" action="/dev/bots/{{ bot.id }}/delist" class="inline">
+        <form method="post" action="/dev/bots/{{ bot.id }}/delist" class="inline"
+              data-confirm="Delist this listing from the marketplace?">
           <button class="linklike" type="submit">Delist</button>
         </form>
         {% endif %}

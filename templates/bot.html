@@ -24,7 +24,11 @@
   <aside class="buybox">
     <div class="price big">{{ money(bot.price_cents) }}</div>
     <p class="muted">One-time purchase · licence key issued on payment</p>
+    {% if user %}
     <a class="btn primary wide" href="/api/checkout/{{ bot.slug }}">Buy now</a>
+    {% else %}
+    <a class="btn wide" href="/signin">Sign in to buy</a>
+    {% endif %}
     <p class="muted tiny">Checkout uses the listing's Stripe payment link when one
     is stored. If none is stored yet, the request returns 409 — payments are not
     activated on this deployment.</p>

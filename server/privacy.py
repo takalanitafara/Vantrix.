@@ -20,10 +20,24 @@ from .auth import is_owner, session_user
 from .db import connect
 from .util import render_error
 
-# Paths reachable without any session while private.
-_OPEN_PATHS = {"/health", "/signin", "/signout", "/signup"}
+# Paths reachable without any session while private (no marketplace data).
+_OPEN_PATHS = {
+    "/health", "/signin", "/signout", "/signup",
+    "/robots.txt", "/favicon.ico", "/favicon.svg",
+}
 
 _ASSET_PREFIXES = ("/static/",)
+
+
+class SecurityHeadersMiddleware(BaseHTTPMiddleware):
+    """Minimal hardening applied to every response."""
+
+    async def dispatch(self, request: Request, call_next):
+        response = await call_next(request)
+        response.headers.setdefault("X-Content-Type-Options", "nosniff")
+        response.headers.setdefault("X-Frame-Options", "SAMEORIGIN")
+        response.headers.setdefault("Referrer-Policy", "same-origin")
+        return response
 
 
 class PrivateModeMiddleware(BaseHTTPMiddleware):

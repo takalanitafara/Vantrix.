@@ -222,6 +222,51 @@ def account_page(request: Request, conn: sqlite3.Connection = Depends(db_dep)):
     return render(request, "account.html", user=user)
 
 
+@router.post("/account/profile")
+def update_profile(
+    request: Request,
+    display_name: str = Form(...),
+    conn: sqlite3.Connection = Depends(db_dep),
+):
+    from .util import render_error
+    user = require_user(request, conn)
+    if not isinstance(user, sqlite3.Row):
+        return user
+    name = display_name.strip()
+    if not name:
+        return render_error(request, 400, "Display name cannot be empty.", user=user)
+    conn.execute(
+        "UPDATE users SET display_name = ? WHERE id = ?", (name, user["id"])
+    )
+    conn.commit()
+    return RedirectResponse("/account?notice=profile_updated", status_code=303)
+
+
+@router.post("/account/password")
+def update_password(
+    request: Request,
+    current_password: str = Form(...),
+    new_password: str = Form(...),
+    conn: sqlite3.Connection = Depends(db_dep),
+):
+    from .util import render_error
+    user = require_user(request, conn)
+    if not isinstance(user, sqlite3.Row):
+        return user
+    if not verify_password(current_password, user["password_hash"]):
+        return render_error(request, 400, "Current password is incorrect.", user=user)
+    if len(new_password) < 8:
+        return render_error(
+            request, 400, "New password must be at least 8 characters.", user=user
+        )
+    conn.execute(
+        "UPDATE users SET password_hash = ? WHERE id = ?",
+        (hash_password(new_password), user["id"]),
+    )
+    conn.commit()
+    return RedirectResponse("/account?notice=password_changed", status_code=303)
+
+
 @router.post("/signout")
 def signout():
     response = RedirectResponse("/", status_code=303)

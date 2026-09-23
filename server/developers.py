@@ -113,6 +113,30 @@ def dev_dashboard(request: Request, conn: sqlite3.Connection = Depends(db_dep)):
     return render(request, "dev_dashboard.html", user=user, dev=dev, bots=bots)
 
 
+@router.post("/dev/profile")
+def update_dev_profile(
+    request: Request,
+    display_name: str = Form(...),
+    bio: str = Form(""),
+    conn: sqlite3.Connection = Depends(db_dep),
+):
+    user = require_user(request, conn)
+    if not isinstance(user, sqlite3.Row):
+        return user
+    dev = _profile_for(conn, user)
+    if dev is None:
+        return RedirectResponse("/developers/onboard", status_code=303)
+    name = display_name.strip()
+    if not name:
+        return render_error(request, 400, "Display name cannot be empty.", user=user)
+    conn.execute(
+        "UPDATE developer_profiles SET display_name = ?, bio = ? WHERE id = ?",
+        (name, bio.strip(), dev["id"]),
+    )
+    conn.commit()
+    return RedirectResponse("/dev?notice=profile_updated", status_code=303)
+
+
 @router.post("/dev/bots")
 def create_bot(
     request: Request,

@@ -10,6 +10,21 @@
       <tr><th>Role</th><td><span class="pill">{{ user.role }}</span>{% if owner %} <span class="pill gold">owner access</span>{% endif %}</td></tr>
       <tr><th>Member since</th><td class="muted">{{ user.created_at }}</td></tr>
     </table>
+
+    <h2 class="section-title">Profile</h2>
+    <form class="stacked narrow" method="post" action="/account/profile">
+      <label>Display name
+        <input type="text" name="display_name" value="{{ user.display_name }}" required>
+      </label>
+      <button class="btn" type="submit">Save profile</button>
+    </form>
+
+    <h2 class="section-title">Change password</h2>
+    <form class="stacked narrow" method="post" action="/account/password">
+      <label>Current password <input type="password" name="current_password" required></label>
+      <label>New password <input type="password" name="new_password" minlength="8" required></label>
+      <button class="btn" type="submit">Change password</button>
+    </form>
   </div>
   <aside class="buybox">
     <h3>Quick links</h3>

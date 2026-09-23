@@ -68,7 +68,8 @@ for `QUANTVENUE_PRIVATE_MODE` — including unset or garbage — means **private
 
 - **Marketplace:** listings, search/browse, categories, featured — `GET /api/bots`,
   `GET /api/bots/{slug}`, `/`, `/bot/{slug}`
-- **Accounts:** signup/signin/sessions, profile — `/signin`, `/signup`, `/account`
+- **Accounts:** signup/signin/sessions, profile & password management — `/signin`,
+  `/signup`, `/account`
 - **Payments (plumbing):** `GET /api/checkout/{slug}` redirects to the listing's
   stored Stripe payment link (409 when none is stored);
   `POST /api/checkout/confirm/{ref}` + `/checkout/confirm/{ref}` confirm plumbing

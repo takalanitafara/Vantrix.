@@ -85,3 +85,26 @@ def test_developors_index_lists_profiles(member_client):
     _onboard(member_client, name="Listed Dev")
     r = member_client.get("/developers")
     assert "Listed Dev" in r.text
+
+
+def test_update_dev_profile(member_client):
+    _onboard(member_client, name="Old Name")
+    r = member_client.post(
+        "/dev/profile",
+        data={"display_name": "New Name", "bio": "Fresh bio indeed"},
+        follow_redirects=False,
+    )
+    assert r.status_code == 303
+    row = db_row("SELECT * FROM developer_profiles WHERE display_name='New Name'")
+    assert row is not None
+    assert row["bio"] == "Fresh bio indeed"
+
+
+def test_dev_profile_requires_profile_first(member_client):
+    r = member_client.post(
+        "/dev/profile",
+        data={"display_name": "X", "bio": ""},
+        follow_redirects=False,
+    )
+    assert r.status_code == 303
+    assert r.headers["location"] == "/developers/onboard"
