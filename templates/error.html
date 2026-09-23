@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}{{ status }}{% endblock %}
+{% block content %}
+<div class="authbox">
+  <h1>{{ status }}</h1>
+  <p class="lede">{{ message }}</p>
+  <p><a class="btn" href="/">Back to marketplace</a>
+  {% if not user %}<a class="btn primary" href="/signin">Sign in</a>{% endif %}</p>
+</div>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Account{% endblock %}
+{% block content %}
+<h1>Account</h1>
+<div class="detail">
+  <div class="detail-main">
+    <table>
+      <tr><th>Email</th><td>{{ user.email }}</td></tr>
+      <tr><th>Display name</th><td>{{ user.display_name }}</td></tr>
+      <tr><th>Role</th><td><span class="pill">{{ user.role }}</span>{% if owner %} <span class="pill gold">owner access</span>{% endif %}</td></tr>
+      <tr><th>Member since</th><td class="muted">{{ user.created_at }}</td></tr>
+    </table>
+  </div>
+  <aside class="buybox">
+    <h3>Quick links</h3>
+    <p><a href="/account/my-bots">My bots &amp; licences</a></p>
+    <p><a href="/account/subscriptions">Subscription plans</a></p>
+    <p><a href="/dev">Developer studio</a></p>
+    {% if owner %}<p><a href="/admin">Admin dashboard</a></p>{% endif %}
+  </aside>
+</div>
+{% endblock %}

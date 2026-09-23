@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% block title %}Admin{% endblock %}
+{% block content %}
+<h1>Admin dashboard</h1>
+<p class="muted">Platform management &amp; moderation · owner/admin access only.</p>
+
+<h2 class="section-title">Overview</h2>
+<div class="cards">
+  <div class="card"><h3>Users</h3><div class="value">{{ stats.users }}</div></div>
+  <div class="card"><h3>Listings</h3><div class="value">{{ stats.bots }} <span class="muted tiny">({{ stats.published }} published)</span></div></div>
+  <div class="card"><h3>Orders</h3><div class="value">{{ stats.orders }}</div></div>
+  <div class="card"><h3>Licences</h3><div class="value">{{ stats.licenses }}</div></div>
+  <div class="card"><h3>Reviews pending</h3><div class="value">{{ stats.reviews_pending }}</div></div>
+</div>
+
+<h2 class="section-title">Finance overview</h2>
+<div class="callout">
+  No real money has moved. The business has no connected Stripe account; the
+  figures below are plumbing-mode order totals only — <strong>not real revenue</strong>.
+  Real financial figures come from the business finance tools, never from this page.
+</div>
+<table>
+  <tr><th>Orders (total)</th><td>{{ finance.orders_total }}</td></tr>
+  <tr><th>Plumbing gross (completed orders)</th><td>{{ money(finance.gross_cents) }}</td></tr>
+  <tr><th>Pending (unconfirmed)</th><td>{{ money(finance.pending_cents) }}</td></tr>
+</table>
+<h3>Products (plans)</h3>
+<table>
+  <thead><tr><th>Plan</th><th>Price</th><th>Period</th></tr></thead>
+  <tbody>{% for p in products %}<tr><td>{{ p.name }}</td><td>{{ money(p.price_cents) }}</td><td>{{ p.period }}</td></tr>{% endfor %}</tbody>
+</table>
+
+<h2 class="section-title">Users</h2>
+<table>
+  <thead><tr><th>Email</th><th>Name</th><th>Role</th><th>Since</th><th>Set role</th></tr></thead>
+  <tbody>
+  {% for u in users %}
+    <tr>
+      <td>{{ u.email }}</td>
+      <td>{{ u.display_name }}</td>
+      <td><span class="pill">{{ u.role }}</span></td>
+      <td class="muted">{{ u.created_at }}</td>
+      <td>
+        <form method="post" action="/admin/users/{{ u.id }}/role" class="inline">
+          <select name="role">
+            {% for r in ['user', 'developer', 'admin'] %}
+            <option value="{{ r }}" {% if u.role == r %}selected{% endif %}>{{ r }}</option>
+            {% endfor %}
+          </select>
+          <button class="linklike" type="submit">Set</button>
+        </form>
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+<h2 class="section-title">Listings (moderation)</h2>
+<table>
+  <thead><tr><th>Listing</th><th>Developer</th><th>Status</th><th>Featured</th><th>Actions</th></tr></thead>
+  <tbody>
+  {% for b in bots %}
+    <tr>
+      <td><a href="/bot/{{ b.slug }}">{{ b.name }}</a></td>
+      <td class="muted">{{ b.developer_name or 'QuantVenue Labs' }}</td>
+      <td>
+        <form method="post" action="/admin/bots/{{ b.id }}/status" class="inline">
+          <select name="status">
+            {% for s in ['draft', 'published', 'delisted'] %}
+            <option value="{{ s }}" {% if b.status == s %}selected{% endif %}>{{ s }}</option>
+            {% endfor %}
+          </select>
+          <button class="linklike" type="submit">Set</button>
+        </form>
+      </td>
+      <td>
+        <form method="post" action="/admin/bots/{{ b.id }}/feature" class="inline">
+          <input type="hidden" name="featured" value="{{ 0 if b.featured else 1 }}">
+          <button class="linklike" type="submit">{{ 'Unfeature' if b.featured else 'Feature' }}</button>
+        </form>
+      </td>
+      <td class="muted tiny">{% if b.payment_link_url %}payment link stored{% else %}no payment link{% endif %}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+<h2 class="section-title">Reviews (moderation)</h2>
+{% if reviews %}
+<table>
+  <thead><tr><th>Bot</th><th>Author</th><th>Rating</th><th>Body</th><th>Status</th><th>Moderate</th></tr></thead>
+  <tbody>
+  {% for r in reviews %}
+    <tr>
+      <td><a href="/bot/{{ r.bot_slug }}">{{ r.bot_name }}</a></td>
+      <td>{{ r.author }}</td>
+      <td>{{ r.rating }} ★</td>
+      <td class="muted">{{ r.body[:80] }}</td>
+      <td><span class="pill">{{ r.status }}</span></td>
+      <td>
+        {% for s in ['approved', 'hidden', 'pending'] %}
+        <form method="post" action="/admin/reviews/{{ r.id }}/moderate" class="inline">
+          <input type="hidden" name="status" value="{{ s }}">
+          <button class="linklike" type="submit">{{ s }}</button>
+        </form>
+        {% endfor %}
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="muted">No reviews.</p>
+{% endif %}
+
+<h2 class="section-title">Orders</h2>
+{% if orders %}
+<table>
+  <thead><tr><th>Ref</th><th>Buyer</th><th>Bot</th><th>Amount</th><th>Status</th><th>Action</th></tr></thead>
+  <tbody>
+  {% for o in orders %}
+    <tr>
+      <td><code>{{ o.ref }}</code></td>
+      <td>{{ o.buyer_email }}</td>
+      <td>{{ o.bot_name }}</td>
+      <td>{{ money(o.amount_cents) }}</td>
+      <td><span class="pill">{{ o.status }}</span></td>
+      <td>{% if o.status == 'pending' %}
+        <form method="post" action="/admin/orders/{{ o.ref }}/confirm" class="inline">
+          <button class="linklike" type="submit">Confirm &amp; grant licence</button>
+        </form>
+      {% endif %}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="muted">No orders.</p>
+{% endif %}
+{% endblock %}

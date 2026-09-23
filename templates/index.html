@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Marketplace{% endblock %}
+{% block content %}
+<section class="hero">
+  <span class="badge">Trading-bot marketplace</span>
+  <h1>Independent trading bots,<br>professionally listed.</h1>
+  <p class="lede">QuantVenue is where independent bots like Quantora are listed, purchased and
+  managed. It is a marketplace platform — not a trading engine. Bots stay independent
+  applications; QuantVenue never executes trades.</p>
+  <form class="searchbar" method="get" action="/">
+    <input type="search" name="q" value="{{ q }}" placeholder="Search bots…">
+    <select name="category">
+      <option value="">All categories</option>
+      {% for c in categories %}
+      <option value="{{ c }}" {% if category == c %}selected{% endif %}>{{ c }}</option>
+      {% endfor %}
+    </select>
+    <button class="btn primary" type="submit">Search</button>
+  </form>
+</section>
+
+{% if not q and not category %}
+{% set featured = bots | selectattr('featured') | list %}
+{% if featured %}
+<h2 class="section-title">Featured</h2>
+<div class="cards">
+  {% for bot in featured %}
+  <a class="card featured" href="/bot/{{ bot.slug }}">
+    <div class="card-top">
+      <span class="pill">{{ bot.category }}</span>
+      <span class="price">{{ money(bot.price_cents) }}</span>
+    </div>
+    <h3>{{ bot.name }}</h3>
+    <p class="muted">{{ bot.tagline }}</p>
+    <div class="card-meta">
+      <span class="muted">by {{ bot.developer_name or 'QuantVenue Labs' }}</span>
+      {% if bot.rating_avg %}<span class="stars">{{ '%.1f' | format(bot.rating_avg) }} ★ ({{ bot.review_count }})</span>{% endif %}
+    </div>
+  </a>
+  {% endfor %}
+</div>
+{% endif %}
+{% endif %}
+
+<h2 class="section-title">{% if q or category %}Results{% else %}All listings{% endif %}</h2>
+{% if bots %}
+<div class="cards">
+  {% for bot in bots %}
+  <a class="card" href="/bot/{{ bot.slug }}">
+    <div class="card-top">
+      <span class="pill">{{ bot.category }}</span>
+      <span class="price">{{ money(bot.price_cents) }}</span>
+    </div>
+    <h3>{{ bot.name }}</h3>
+    <p class="muted">{{ bot.tagline }}</p>
+    <div class="card-meta">
+      <span class="muted">by {{ bot.developer_name or 'QuantVenue Labs' }}</span>
+      {% if bot.rating_avg %}<span class="stars">{{ '%.1f' | format(bot.rating_avg) }} ★ ({{ bot.review_count }})</span>{% endif %}
+    </div>
+  </a>
+  {% endfor %}
+</div>
+{% else %}
+<p class="muted">No published listings match.</p>
+{% endif %}
+{% endblock %}

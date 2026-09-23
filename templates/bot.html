@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block title %}{{ bot.name }}{% endblock %}
+{% block content %}
+<p class="crumbs"><a href="/">Marketplace</a> / <span>{{ bot.name }}</span></p>
+<div class="detail">
+  <div class="detail-main">
+    <div class="card-top">
+      <span class="pill">{{ bot.category }}</span>
+      {% if bot.featured %}<span class="pill gold">Featured</span>{% endif %}
+      {% if bot.rating_avg %}<span class="stars">{{ '%.1f' | format(bot.rating_avg) }} ★ · {{ bot.review_count }} reviews</span>{% endif %}
+    </div>
+    <h1>{{ bot.name }}</h1>
+    <p class="lede">{{ bot.tagline }}</p>
+    <p class="muted">by
+      {% if bot.developer_id %}<a href="/developers/{{ bot.developer_slug }}">{{ bot.developer_name }}</a>
+      {% else %}{{ bot.developer_name or 'QuantVenue Labs' }}{% endif %}
+    </p>
+    <p>{{ bot.description }}</p>
+    <div class="callout">
+      QuantVenue is the marketplace layer only. This bot runs as an independent
+      application — no trading, broker or execution logic runs on this platform.
+    </div>
+  </div>
+  <aside class="buybox">
+    <div class="price big">{{ money(bot.price_cents) }}</div>
+    <p class="muted">One-time purchase · licence key issued on payment</p>
+    <a class="btn primary wide" href="/api/checkout/{{ bot.slug }}">Buy now</a>
+    <p class="muted tiny">Checkout uses the listing's Stripe payment link when one
+    is stored. If none is stored yet, the request returns 409 — payments are not
+    activated on this deployment.</p>
+    {% if user %}
+    <p class="muted tiny">Signed in as {{ user.email }}</p>
+    {% else %}
+    <p class="muted tiny"><a href="/signin">Sign in</a> to purchase.</p>
+    {% endif %}
+  </aside>
+</div>
+
+<h2 class="section-title">Reviews</h2>
+{% if reviews %}
+<div class="reviews">
+  {% for r in reviews %}
+  <div class="review">
+    <div class="review-head">
+      <strong>{{ r.display_name }}</strong>
+      <span class="stars">{{ r.rating }} ★</span>
+    </div>
+    {% if r.body %}<p>{{ r.body }}</p>{% endif %}
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<p class="muted">No reviews yet. Reviews are moderated before publication.</p>
+{% endif %}
+
+{% if user %}
+  {% if my_review %}
+    {% if my_review.status == 'pending' %}
+    <p class="notice">Your review is queued for moderation.</p>
+    {% elif my_review.status == 'hidden' %}
+    <p class="muted">Your review was hidden by moderation.</p>
+    {% endif %}
+    <details class="review-form">
+      <summary>Edit your review</summary>
+      <form method="post" action="/bot/{{ bot.slug }}/reviews">
+        <label>Rating
+          <select name="rating">
+            {% for i in range(1, 6) %}
+            <option value="{{ i }}" {% if my_review.rating == i %}selected{% endif %}>{{ i }} ★</option>
+            {% endfor %}
+          </select>
+        </label>
+        <label>Review<textarea name="body" rows="3">{{ my_review.body }}</textarea></label>
+        <button class="btn" type="submit">Update review</button>
+      </form>
+    </details>
+  {% else %}
+  <form class="review-form" method="post" action="/bot/{{ bot.slug }}/reviews">
+    <h3>Leave a review</h3>
+    <label>Rating
+      <select name="rating">
+        {% for i in range(1, 6) %}<option value="{{ i }}">{{ i }} ★</option>{% endfor %}
+      </select>
+    </label>
+    <label>Review<textarea name="body" rows="3" placeholder="What stood out?"></textarea></label>
+    <button class="btn primary" type="submit">Submit review</button>
+  </form>
+  {% endif %}
+{% else %}
+<p class="muted"><a href="/signin">Sign in</a> to leave a review.</p>
+{% endif %}
+{% endblock %}

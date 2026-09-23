@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}{{ dev.display_name }}{% endblock %}
+{% block content %}
+<p class="crumbs"><a href="/developers">Developers</a> / <span>{{ dev.display_name }}</span></p>
+<h1>{{ dev.display_name }}</h1>
+<p class="lede">{{ dev.bio or 'Independent bot developer.' }}</p>
+<h2 class="section-title">Listings</h2>
+<div class="cards">
+  {% for bot in bots %}
+  <a class="card" href="/bot/{{ bot.slug }}">
+    <div class="card-top">
+      <span class="pill">{{ bot.category }}</span>
+      <span class="price">{{ money(bot.price_cents) }}</span>
+    </div>
+    <h3>{{ bot.name }}</h3>
+    <p class="muted">{{ bot.tagline }}</p>
+  </a>
+  {% else %}
+  <p class="muted">No published listings.</p>
+  {% endfor %}
+</div>
+{% endblock %}

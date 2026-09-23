@@ -1,0 +1,21 @@
+services:
+  quantvenue:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "${PORT:-3000}:${PORT:-3000}"
+    environment:
+      PORT: "${PORT:-3000}"
+      # Fail-closed privacy gate: only the owner/admin account can use the app.
+      QUANTVENUE_PRIVATE_MODE: "${QUANTVENUE_PRIVATE_MODE:-true}"
+      # Comma-separated owner/admin emails (DB role 'admin' also works).
+      QUANTVENUE_ADMIN_EMAILS: "${QUANTVENUE_ADMIN_EMAILS:-}"
+      # Set a strong value in production; sessions survive restarts.
+      QUANTVENUE_SECRET_KEY: "${QUANTVENUE_SECRET_KEY:-}"
+      QUANTVENUE_DATA_DIR: /app/data
+    volumes:
+      # Persistent volume: the SQLite database survives deploys/upgrades.
+      - quantvenue_data:/app/data
+
+volumes:
+  quantvenue_data:

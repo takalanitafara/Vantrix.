@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}Marketplace{% endblock %} · {{ brand }}</title>
+<link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+<nav>
+  <div class="container nav-inner">
+    <a class="logo" href="/">Quant<span>Venue</span></a>
+    {% if private_mode %}<span class="pill private">PRIVATE</span>{% endif %}
+    <div class="navlinks">
+      <a href="/">Marketplace</a>
+      <a href="/developers">Developers</a>
+      {% if user %}
+        <a href="/account/my-bots">My bots</a>
+        <a href="/account/subscriptions">Plans</a>
+        <a href="/account">Account</a>
+        <a href="/dev">Studio</a>
+        {% if owner %}<a class="admin-link" href="/admin">Admin</a>{% endif %}
+        <form method="post" action="/signout" class="inline">
+          <button class="linklike" type="submit">Sign out</button>
+        </form>
+      {% else %}
+        <a href="/signin">Sign in</a>
+        {% if not private_mode %}<a href="/signup">Sign up</a>{% endif %}
+      {% endif %}
+    </div>
+  </div>
+</nav>
+<main class="container">
+  {% set notices = {
+    'review_submitted': 'Thanks — your review is queued for moderation.',
+    'listing_created': 'Listing created as a draft.',
+    'listing_updated': 'Listing updated.',
+    'listing_published': 'Listing published to the marketplace.',
+    'listing_delisted': 'Listing delisted.',
+    'subscribed': 'You are subscribed.',
+    'paid_plan_pending_payments': 'Paid plan recorded as pending — billing activates when real payments go live (owner-deferred).',
+  } %}
+  {% set n = request.query_params.get('notice') %}
+  {% if n and notices.get(n) %}<div class="notice">{{ notices[n] }}</div>{% endif %}
+  {% block content %}{% endblock %}
+</main>
+<footer>
+  <div class="container foot">
+    <span>{{ brand }} — a trading-bot marketplace. Platform layer only.</span>
+    <span>QuantVenue does not run trading logic, brokers, or execution.</span>
+    <span>Private production · no real payments processed</span>
+  </div>
+</footer>
+</body>
+</html>

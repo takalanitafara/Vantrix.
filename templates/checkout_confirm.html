@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Order confirmed{% endblock %}
+{% block content %}
+<div class="authbox">
+  <h1>Order confirmed</h1>
+  <p class="lede">Licence issued for <strong>{{ bot.name }}</strong>.</p>
+  <div class="licence-key">{{ lic.license_key }}</div>
+  <p class="muted">Order <code>{{ order.ref }}</code> · {{ order.status }} ·
+  {{ money(order.amount_cents) }}. Find this any time under
+  <a href="/account/my-bots">My bots</a>.</p>
+  <p class="muted tiny">Confirmation plumbing only — no real payment was processed
+  on this deployment (real payments are owner-deferred).</p>
+  <p><a class="btn primary" href="/account/my-bots">Go to my bots</a></p>
+</div>
+{% endblock %}

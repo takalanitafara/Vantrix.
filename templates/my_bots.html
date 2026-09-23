@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}My bots{% endblock %}
+{% block content %}
+<h1>My bots</h1>
+<p class="muted">Licences granted through QuantVenue. Bots run as independent
+applications — download/access details come from the developer.</p>
+
+{% if licenses %}
+<table>
+  <thead><tr><th>Bot</th><th>Licence key</th><th>Status</th><th>Issued</th></tr></thead>
+  <tbody>
+  {% for lic in licenses %}
+    <tr>
+      <td><a href="/bot/{{ lic.bot_slug }}">{{ lic.bot_name }}</a></td>
+      <td><code>{{ lic.license_key }}</code></td>
+      <td><span class="pill {% if lic.status == 'active' %}ok{% endif %}">{{ lic.status }}</span></td>
+      <td class="muted">{{ lic.created_at }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="muted">No licences yet. <a href="/">Browse the marketplace</a>.</p>
+{% endif %}
+
+<h2 class="section-title">Orders</h2>
+{% if orders %}
+<table>
+  <thead><tr><th>Ref</th><th>Bot</th><th>Amount</th><th>Status</th><th></th></tr></thead>
+  <tbody>
+  {% for o in orders %}
+    <tr>
+      <td><code>{{ o.ref }}</code></td>
+      <td>{{ o.bot_name }}</td>
+      <td>{{ money(o.amount_cents) }}</td>
+      <td><span class="pill">{{ o.status }}</span></td>
+      <td>{% if o.status == 'pending' %}
+        <a class="linklike" href="/checkout/confirm/{{ o.ref }}">confirm (plumbing)</a>
+      {% endif %}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="muted">No orders yet.</p>
+{% endif %}
+{% endblock %}

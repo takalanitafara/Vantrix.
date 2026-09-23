@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Plans{% endblock %}
+{% block content %}
+<h1>Subscription plans</h1>
+<p class="muted">Platform tiers for buyers and developers. Paid tiers do not bill
+yet — real payments are explicitly deferred by the owner.</p>
+
+{% if current %}
+<p class="notice">Current plan: <strong>{{ current.plan_name }}</strong>
+(<span class="pill">{{ current.status }}</span>)</p>
+{% endif %}
+
+<div class="cards">
+  {% for plan in plans %}
+  <div class="card">
+    <h3>{{ plan.name }}</h3>
+    <div class="price big">{{ money(plan.price_cents) }}</div>
+    <p class="muted">per {{ plan.period }}</p>
+    <form method="post" action="/account/subscriptions">
+      <input type="hidden" name="plan_slug" value="{{ plan.slug }}">
+      <button class="btn {% if plan.price_cents == 0 %}primary{% endif %} wide" type="submit">
+        {% if current and current.plan_slug == plan.slug %}Current{% else %}Choose{% endif %}
+      </button>
+    </form>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

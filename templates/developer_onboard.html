@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Developer onboarding{% endblock %}
+{% block content %}
+<div class="authbox wide">
+  <h1>Developer onboarding</h1>
+  {% if existing %}
+  <p class="notice">You already have a developer page:
+    <a href="/developers/{{ existing.slug }}">{{ existing.display_name }}</a>.
+    Head to your <a href="/dev">studio</a> to manage listings.</p>
+  {% else %}
+  <p class="muted">Create your seller profile to list bots. QuantVenue is the
+  marketplace layer only — you remain the independent seller of your bots.</p>
+  <form method="post" action="/developers/onboard">
+    <label>Display name <input type="text" name="display_name" required autofocus></label>
+    <label>Bio <textarea name="bio" rows="3"></textarea></label>
+    <button class="btn primary wide" type="submit">Create developer page</button>
+  </form>
+  {% endif %}
+</div>
+{% endblock %}

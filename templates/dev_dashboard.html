@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Studio{% endblock %}
+{% block content %}
+<h1>Developer studio</h1>
+<p class="muted">{{ dev.display_name }} · <a href="/developers/{{ dev.slug }}">view public page</a></p>
+
+<h2 class="section-title">Your listings</h2>
+{% if bots %}
+<table>
+  <thead><tr><th>Listing</th><th>Category</th><th>Price</th><th>Status</th><th>Payment link</th><th>Actions</th></tr></thead>
+  <tbody>
+  {% for bot in bots %}
+    <tr>
+      <td><a href="/bot/{{ bot.slug }}">{{ bot.name }}</a><br><span class="muted tiny">{{ bot.tagline }}</span></td>
+      <td>{{ bot.category }}</td>
+      <td>{{ money(bot.price_cents) }}</td>
+      <td><span class="pill">{{ bot.status }}</span></td>
+      <td class="muted tiny">{% if bot.payment_link_url %}stored{% else %}none (409 at checkout){% endif %}</td>
+      <td class="actions-cell">
+        {% if bot.status != 'published' %}
+        <form method="post" action="/dev/bots/{{ bot.id }}/publish" class="inline">
+          <button class="linklike" type="submit">Publish</button>
+        </form>
+        {% else %}
+        <form method="post" action="/dev/bots/{{ bot.id }}/delist" class="inline">
+          <button class="linklike" type="submit">Delist</button>
+        </form>
+        {% endif %}
+        <details class="inline-details">
+          <summary class="linklike">Edit</summary>
+          <form method="post" action="/dev/bots/{{ bot.id }}/update" class="stacked">
+            <label>Name <input type="text" name="name" value="{{ bot.name }}" required></label>
+            <label>Tagline <input type="text" name="tagline" value="{{ bot.tagline }}"></label>
+            <label>Description <textarea name="description" rows="3">{{ bot.description }}</textarea></label>
+            <label>Category <input type="text" name="category" value="{{ bot.category }}"></label>
+            <label>Price (cents) <input type="number" name="price_cents" value="{{ bot.price_cents }}"></label>
+            <label>Stripe payment link URL <input type="url" name="payment_link_url" value="{{ bot.payment_link_url or '' }}" placeholder="https://buy.stripe.com/…"></label>
+            <button class="btn" type="submit">Save</button>
+          </form>
+        </details>
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="muted">No listings yet — create your first below.</p>
+{% endif %}
+
+<h2 class="section-title">New listing</h2>
+<form class="stacked narrow" method="post" action="/dev/bots">
+  <label>Name <input type="text" name="name" required></label>
+  <label>Tagline <input type="text" name="tagline"></label>
+  <label>Description <textarea name="description" rows="3"></textarea></label>
+  <label>Category <input type="text" name="category" placeholder="expert-advisors, indicators, utilities…"></label>
+  <label>Price (cents) <input type="number" name="price_cents" value="0"></label>
+  <label>Stripe payment link URL <input type="url" name="payment_link_url" placeholder="https://buy.stripe.com/… (optional)"></label>
+  <button class="btn primary" type="submit">Create draft listing</button>
+</form>
+{% endblock %}

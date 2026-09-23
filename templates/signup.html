@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Sign up{% endblock %}
+{% block content %}
+<div class="authbox">
+  <h1>Create account</h1>
+  {% if private_mode %}
+  <p class="notice">Public signups are <strong>disabled</strong> on this private
+  deployment. Only owner/admin emails (from <code>QUANTVENUE_ADMIN_EMAILS</code>)
+  may register.</p>
+  {% endif %}
+  <form method="post" action="/signup">
+    <label>Display name <input type="text" name="display_name" required></label>
+    <label>Email <input type="email" name="email" required autofocus></label>
+    <label>Password <input type="password" name="password" minlength="8" required></label>
+    <button class="btn primary wide" type="submit">Create account</button>
+  </form>
+  <p class="muted">Already registered? <a href="/signin">Sign in</a></p>
+</div>
+{% endblock %}

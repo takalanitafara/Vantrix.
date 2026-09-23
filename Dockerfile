@@ -5,10 +5,15 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . .
+COPY server ./server
+COPY templates ./templates
+COPY web ./web
 
-ENV PORT=8000
+# Persistent volume mount point: SQLite database lives here.
+ENV QUANTVENUE_DATA_DIR=/app/data
+ENV PORT=3000
 
-CMD ["python", "-m", "uvicorn", "server:app", "--host", "0.0.0.0", "--port", "8000"]
+EXPOSE 3000
 
-
+# Honours $PORT so the same image upgrades on any platform without rebuilds.
+CMD ["sh", "-c", "uvicorn server:app --host 0.0.0.0 --port ${PORT:-3000}"]

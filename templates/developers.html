@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Developers{% endblock %}
+{% block content %}
+<h1>Developers</h1>
+<p class="lede">Independent sellers who list their bots on QuantVenue.</p>
+{% if user %}<p><a class="btn" href="/developers/onboard">Become a developer</a></p>{% endif %}
+<div class="cards">
+  {% for dev in developers %}
+  <a class="card" href="/developers/{{ dev.slug }}">
+    <h3>{{ dev.display_name }}</h3>
+    <p class="muted">{{ dev.bio[:120] }}{% if dev.bio|length > 120 %}…{% endif %}</p>
+    <div class="card-meta"><span class="pill">{{ dev.bot_count }} listing{{ '' if dev.bot_count == 1 else 's' }}</span></div>
+  </a>
+  {% else %}
+  <p class="muted">No developer pages yet.</p>
+  {% endfor %}
+</div>
+{% endblock %}
