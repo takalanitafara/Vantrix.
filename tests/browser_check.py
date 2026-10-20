@@ -1,4 +1,5 @@
 """Real Chromium checks. Run with BASE_URL and optional ARTIFACT_DIR."""
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -8,6 +9,7 @@ from playwright.sync_api import sync_playwright
 base = os.environ.get("BASE_URL", "http://127.0.0.1:8000").rstrip("/")
 out = Path(os.environ.get("ARTIFACT_DIR", "artifacts"))
 out.mkdir(parents=True, exist_ok=True)
+expected_html = (Path(__file__).resolve().parents[1] / "web" / "index.html").read_text()
 results = []
 with sync_playwright() as p:
     browser = p.chromium.launch(
@@ -20,6 +22,7 @@ with sync_playwright() as p:
         page.on("pageerror", lambda error: errors.append(str(error)))
         response = page.goto(base + "/", wait_until="networkidle")
         assert response.status == 200, response.status
+        assert response.text() == expected_html, "Served homepage does not match checked-out revision"
         assert page.title() == "Vantrix — Intelligent Trading Systems"
         assert page.locator("h1").is_visible()
         assert page.locator("#server-status").inner_text() == "Not checked"
@@ -50,5 +53,5 @@ with sync_playwright() as p:
     response = browser.new_context().request.get(base + "/does-not-exist")
     assert response.status == 404, response.status
     browser.close()
-(out / "browser-results.json").write_text(json.dumps({"base_url": base, "results": results}, indent=2))
+(out / "browser-results.json").write_text(json.dumps({"base_url": base, "html_sha256": hashlib.sha256(expected_html.encode()).hexdigest(), "results": results}, indent=2))
 print(json.dumps(results, indent=2))
