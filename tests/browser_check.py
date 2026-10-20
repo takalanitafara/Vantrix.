@@ -10,7 +10,10 @@ out = Path(os.environ.get("ARTIFACT_DIR", "artifacts"))
 out.mkdir(parents=True, exist_ok=True)
 results = []
 with sync_playwright() as p:
-    browser = p.chromium.launch()
+    browser = p.chromium.launch(
+        executable_path=os.environ.get("CHROMIUM_EXECUTABLE_PATH"),
+        args=["--no-sandbox", "--disable-dev-shm-usage", "--no-zygote"],
+    )
     for label, width, height in [("desktop", 1440, 1000), ("mobile", 390, 844), ("small-mobile", 320, 740)]:
         page = browser.new_page(viewport={"width": width, "height": height})
         errors = []
@@ -27,6 +30,8 @@ with sync_playwright() as p:
         page.get_by_role("button", name="Check Server", exact=True).click()
         page.wait_for_function("document.querySelector('#server-value').textContent === 'Online'")
         assert page.locator("#result").inner_text() == "Server: running"
+        page.evaluate("window.scrollTo({top: 0, behavior: 'instant'})")
+        page.wait_for_timeout(100)
         page.screenshot(path=str(out / f"{label}.png"), full_page=True)
         # Test HTTP error and recovery in the actual browser, not only mocks of the DOM.
         page.route("**/health", lambda route: route.fulfill(status=503, body='{}'))
