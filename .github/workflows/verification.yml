@@ -42,7 +42,7 @@ jobs:
         if: always()
         run: docker logs vantrix; docker logs vantrix-custom || true
   production-browser:
-    if: github.event_name == 'workflow_dispatch' && inputs.production_url != ''
+    # Production smoke checks run on pushes and may target an explicit URL manually.
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -53,7 +53,7 @@ jobs:
       - run: python -m playwright install --with-deps chromium
       - name: Check public production endpoints and browser
         env:
-          BASE_URL: ${{ inputs.production_url }}
+          BASE_URL: ${{ inputs.production_url || 'https://vantrix-plum.vercel.app' }}
         run: python tests/browser_check.py
       - uses: actions/upload-artifact@v4
         if: always()
