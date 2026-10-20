@@ -25,13 +25,13 @@ jobs:
         run: |
           docker run -d --name vantrix -p 8000:8000 vantrix:verify
           test "$(docker exec vantrix id -u)" != "0"
-          curl --fail --retry 15 --retry-connrefused --retry-delay 1 http://127.0.0.1:8000/health
+          curl --fail --retry 15 --retry-all-errors --retry-delay 1 http://127.0.0.1:8000/health
       - name: Browser checks against container
         run: python tests/browser_check.py
       - name: Verify custom PORT in container
         run: |
           docker run -d --name vantrix-custom -e PORT=8080 -p 8080:8080 vantrix:verify
-          curl --fail --retry 15 --retry-connrefused --retry-delay 1 http://127.0.0.1:8080/health
+          curl --fail --retry 15 --retry-all-errors --retry-delay 1 http://127.0.0.1:8080/health
       - name: Upload screenshots and results
         if: always()
         uses: actions/upload-artifact@v4
