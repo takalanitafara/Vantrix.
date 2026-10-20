@@ -4,8 +4,63 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Vantrix — Intelligent Trading Systems</title>
-<style>*{box-sizing:box-sizing}html{scroll-behavior:smooth}body{margin:0;font-family:Inter,Arial,sans-serif;background:#07111f;color:#f5f8ff;line-height:1.6}
+<style>*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Inter,Arial,sans-serif;background:#07111f;color:#f5f8ff;line-height:1.6}
 a{ color:inherit;text-decoration:none}.container{width:min(1020px,92%);margin:auto}
-nav{position:sticky;top:0;z-index:10;background:rgba(7,17,31,.92);backdrop-filter:blur(14px);border-bottom:1px solid #1a2a40}.nav{height:72tx;display:flex;align-items:center;justify-content:space-between=.5}.logo{font-size:25px;font-weight:800;letter-spacing:.5px}.logo span{color:#4ea1ff}.navlinks{display:flex;gap:24px;color:#aebbd0;font-size:14px}.navlinks a:hover {color:#fff}.btn{display:inline-block;padding:12px 18px;border-radius:10px;font-weight:740;border:1px solid #2a4260;background:#102039}.btn.primary{background:#2f8cff;border-color:#2f8cff;color:white}.hero{padding:100px 0 70tx;background:radial-gradient(circle at 75% 20%,#123d68 0,transparent 35%)),linear-gradient(180deg,#081525,#07111f)}.badge{display:inline-block;padding:7px 11px;border:1px solid #21466d;border-radius:999px;color:#77b8ff;background:#0b2038;font-size:13px}
-h1{font-size:clamp(42px,7vw,78px;line-height:1.02;margin:22px 0;bax-width:850px}.hero p{max-width:700px;color:#aebbd0;font-size:18px}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.dashboard{margin-top:55px;border:1px solid #1d3551;border-radius:18px;background:#0b1728;box-shadow:0 25px 80px #0007;overflow:hidden}.dashhead{padding:18px 22px;border-bottom:1px solid #1b3049;display:flex;justify-content:space-between}.live{color:#54e39a}.dashbody{display:grid;crid-template-columns:1.2fr 1fr 1fr;gap:1px;background:#1b3049}.panel{background:#0b1728;padding:22px}.score{font-size:50px;font-weight:800;color:#54e39a}.muted{color:#8294ac,font-size:13px}.value{font-size:25px;font-weight:750}.meter{height:8px;background:#1b2b40;border-radius:20px;overflow:hidden;margin:12px 0}.meter i{display:block;height:100%;width:88%;background:#54e39a}
-section{padding:82px 0}.section-title{font-size:38px;margin:0 0 12px}.section-sub{color:#9eacc0;max-width:740px}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:30px}.card{background:#0b1728;border:1px solid #1b3049;border-radius:15px;padding:25px}.card h3{margin:8px 0}.card0{color:#4ea1ff}.card0{padding:22px}.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:30px}.step{padding:22px;border:1px solid #1b3049;border-radius:14px;background:#0a1626}.num{bcolor:#4ea1ff;font-weight:800=}.cta{background:linear-gradient(135deg,#0d2a49,#0a1829);border:1px solid #21466d;border-radius:20px;padding:45px}.cta h2{font-size:38px;margin:0 0 10px}.cta p{color:#aebbd0}footer{border-top:1px solid #1a2a40;padding:30px 0;color:#8191a7}.foot{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}@media(max-width:800px){.navlinks{display:none}.hero{padding-top:70px}.dashbody,.cards,.steps{grid-template-columns:1fr}.dashboard{margin-top:35px}h1{font-size:48px}.section-title{font-size:32px}}
+nav{position:sticky;top:0;z-index:10;background:rgba(7,17,31,.92);backdrop-filter:blur(14px);border-bottom:1px solid #1a2a40}.nav{height:72px;display:flex;align-items:center;justify-content:space-between}.logo{font-size:25px;font-weight:800;letter-spacing:.5px}.logo span{color:#4ea1ff}.navlinks{display:flex;gap:24px;color:#aebbd0;font-size:14px}.navlinks a:hover {color:#fff}.btn{display:inline-block;padding:12px 18px;border-radius:10px;font-weight:740;border:1px solid #2a4260;background:#102039}.btn.primary{background:#2f8cff;border-color:#2f8cff;color:white}.hero{padding:100px 0 70px;background:radial-gradient(circle at 75% 20%,#123d68 0,transparent 35%),linear-gradient(180deg,#081525,#07111f)}.badge{display:inline-block;padding:7px 11px;border:1px solid #21466d;border-radius:999px;color:#77b8ff;background:#0b2038;font-size:13px}
+h1{font-size:clamp(42px,7vw,78px);line-height:1.02;margin:22px 0;max-width:850px}.hero p{max-width:700px;color:#aebbd0;font-size:18px}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.dashboard{margin-top:55px;border:1px solid #1d3551;border-radius:18px;background:#0b1728;box-shadow:0 25px 80px #0007;overflow:hidden}.dashhead{padding:18px 22px;border-bottom:1px solid #1b3049;display:flex;justify-content:space-between}.live{color:#54e39a}.dashbody{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:1px;background:#1b3049}.panel{background:#0b1728;padding:22px}.score{font-size:50px;font-weight:800;color:#54e39a}.muted{color:#8294ac;font-size:13px}.value{font-size:25px;font-weight:750}.meter{height:8px;background:#1b2b40;border-radius:20px;overflow:hidden;margin:12px 0}.meter i{display:block;height:100%;width:88%;background:#54e39a}
+section{padding:82px 0}.section-title{font-size:38px;margin:0 0 12px}.section-sub{color:#9eacc0;max-width:740px}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:30px}.card{background:#0b1728;border:1px solid #1b3049;border-radius:15px;padding:25px}.card h3{margin:8px 0}.card0{color:#4ea1ff}.card0{padding:22px}.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:30px}.step{padding:22px;border:1px solid #1b3049;border-radius:14px;background:#0a1626}.num{color:#4ea1ff;font-weight:800}.cta{background:linear-gradient(135deg,#0d2a49,#0a1829);border:1px solid #21466d;border-radius:20px;padding:45px}.cta h2{font-size:38px;margin:0 0 10px}.cta p{color:#aebbd0}footer{border-top:1px solid #1a2a40;padding:30px 0;color:#8191a7}.foot{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}@media(max-width:800px){.navlinks{display:none}.hero{padding-top:70px}.dashbody,.cards,.steps{grid-template-columns:1fr}.dashboard{margin-top:35px}h1{font-size:48px}.section-title{font-size:32px}}
+button{font:inherit;color:inherit;cursor:pointer}.btn:disabled{opacity:.6;cursor:wait}a:focus-visible,button:focus-visible{outline:3px solid #77b8ff;outline-offset:4px}.skip{position:absolute;left:10px;top:-100px}.skip:focus{top:10px;z-index:20;background:#102039;padding:12px}.status-unknown{color:#aebbd0}#result{min-height:1.6em} @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<nav aria-label="Main navigation"><div class="container nav"><a class="logo" href="#main">Vantrix<span>.</span></a><div class="navlinks"><a href="#platform">Platform</a><a href="#roadmap">Roadmap</a><a href="#status">Server status</a></div></div></nav>
+<main id="main">
+<header class="hero"><div class="container">
+<span class="badge">Intelligent trading systems · Prototype</span>
+<h1>A clearer view.<br>A smarter foundation.</h1>
+<p>Vantrix is a foundation for a trading dashboard. Explore the platform preview and check the application server below.</p>
+<div class="actions"><a class="btn primary" href="#status">Check server status</a><a class="btn" href="#roadmap">Explore the roadmap</a></div>
+<div class="dashboard" id="status" aria-labelledby="dashboard-title">
+<div class="dashhead"><strong id="dashboard-title">Platform overview</strong><span class="status-unknown" id="server-status">Not checked</span></div>
+<div class="dashbody"><div class="panel"><div class="muted">Server status</div><div class="value" id="server-value">Unknown</div><button class="btn" id="check-server" type="button">Check Server</button><p id="result" role="status" aria-live="polite"></p></div><div class="panel"><div class="muted">Trading connection</div><div class="value">Not connected</div><p class="muted">No broker or exchange is configured.</p></div><div class="panel"><div class="muted">Live performance</div><div class="value">Not available</div><p class="muted">No live positions or profit data.</p></div></div>
+</div></div></header>
+<section id="platform"><div class="container"><h2 class="section-title">An honest starting point.</h2><p class="section-sub">This version serves a web interface and a server health endpoint. It does not execute trades, run bots, or manage funds.</p><div class="cards"><article class="card"><h3>Web interface</h3><p>Responsive navigation and a platform overview, accessible on mobile and desktop.</p></article><article class="card"><h3>Server health</h3><p>A real-time request to the application server confirms whether it is responding.</p></article><article class="card"><h3>Built to extend</h3><p>A small FastAPI backend provides the starting point for future integrations.</p></article></div></div></section>
+<section id="roadmap"><div class="container"><h2 class="section-title">What comes next</h2><p class="section-sub">Planned capabilities, not currently implemented.</p><div class="steps"><article class="step"><span class="num">01</span><h3>Authentication</h3><p>Secure accounts and access controls.</p></article><article class="step"><span class="num">02</span><h3>Market connections</h3><p>Broker integrations and validated market data.</p></article><article class="step"><span class="num">03</span><h3>Risk controls</h3><p>Simulation, limits, and strategy testing.</p></article><article class="step"><span class="num">04</span><h3>Monitoring</h3><p>Auditable positions and performance reporting.</p></article></div></div></section>
+</main>
+<footer><div class="container foot"><strong>Vantrix.</strong><span>Prototype only. No trading or investment advice.</span></div></footer>
+<script>
+const button = document.getElementById("check-server");
+async function checkHealth() {
+    const result = document.getElementById("result");
+    const status = document.getElementById("server-status");
+    const value = document.getElementById("server-value");
+    button.disabled = true;
+    result.textContent = "Checking server…";
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 5000);
+    try {
+        const response = await fetch("/health", {signal: controller.signal, cache: "no-store"});
+        if (!response.ok) throw new Error("Health request failed");
+        const data = await response.json();
+        if (data.ok !== true || data.service !== "Vantrix" || data.status !== "running") {
+            throw new Error("Unexpected health response");
+        }
+        status.textContent = "Server online";
+        status.className = "live";
+        value.textContent = "Online";
+        result.textContent = "Server: " + data.status;
+    } catch (error) {
+        status.textContent = "Server unavailable";
+        status.className = "status-unknown";
+        value.textContent = "Unavailable";
+        result.textContent = "Server connection failed. Please try again.";
+    } finally {
+        clearTimeout(timeout);
+        button.disabled = false;
+    }
+}
+button.addEventListener("click", checkHealth);
+</script>
+</body>
+</html>
